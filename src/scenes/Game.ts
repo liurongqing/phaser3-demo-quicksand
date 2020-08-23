@@ -4,7 +4,7 @@ const DUDE_KEY = 'dude'
 export default class Game extends Phaser.Scene {
   cursors: any
   player: any
-  quicksand: any
+  quicksands = []
   constructor() {
     super(Keys.GameScene)
   }
@@ -13,21 +13,32 @@ export default class Game extends Phaser.Scene {
     const { width, height } = this.scale
     this.add.image(width * 0.5, height * 0.5, 'sky')
 
-    this.quicksand = new Quicksand(this, 400, height, 100, 32 * 3)
+    const quicksand1: any = new Quicksand(this, 400, height, 100, 32 * 3)
+    const quicksand2: any = new Quicksand(this, 100, height, 100, 32 * 3)
+
+
     this.add.image(400, this.scale.height, 'platform-quicksand').setScale(1, 3)
+      .setOrigin(0, 1)
+
+    this.add.image(100, this.scale.height, 'platform-quicksand').setScale(1, 3)
       .setOrigin(0, 1)
 
     const platforms = this.createPlatforms()
     this.player = this.createPlayer()
-    this.physics.add.collider(this.quicksand.display, this.player, this.quicksand.handleCollidePlayer, null, this.quicksand)
 
     this.physics.add.collider(this.player, platforms)
+
+    this.physics.add.collider(quicksand1.display, this.player, quicksand1.handleCollidePlayer, null, quicksand1)
+    this.physics.add.collider(quicksand2.display, this.player, quicksand2.handleCollidePlayer, null, quicksand2)
+    this.quicksands.push(quicksand1)
+    this.quicksands.push(quicksand2)
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
   update() {
-    this.quicksand.update()
+    this.quicksands.forEach(qs => qs.update())
+
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160)
       this.player.anims.play('left', true)
@@ -47,7 +58,7 @@ export default class Game extends Phaser.Scene {
   }
 
   createPlayer() {
-    const player = this.physics.add.sprite(450, 450, DUDE_KEY)
+    const player = this.physics.add.sprite(100, 450, DUDE_KEY)
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)
     this.anims.create({
@@ -75,12 +86,14 @@ export default class Game extends Phaser.Scene {
 
   createPlatforms() {
     const platforms = this.physics.add.staticGroup()
-    platforms.create(0, this.scale.height, 'platform')
+    platforms.create(-300, this.scale.height, 'platform')
       .setScale(1, 3)
       .setOrigin(0, 1)
       .refreshBody()
 
-
+    platforms.create(200, this.scale.height, 'platform200')
+      .setOrigin(0, 1)
+      .refreshBody()
 
     platforms.create(500, this.scale.height, 'platform')
       .setScale(1, 3)

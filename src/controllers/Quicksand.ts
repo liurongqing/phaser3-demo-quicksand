@@ -16,7 +16,6 @@ export default class Quicksand {
   }
 
   changeCollisionBoxBy(diff: number) {
-    // console.log('diff', diff)
     const body = this.display.body as Phaser.Physics.Arcade.StaticBody
     if (diff > 0 && body.height >= this.display.height) return
     if (diff < 0 && body.height <= 0) return
@@ -38,7 +37,7 @@ export default class Quicksand {
     const wasTouching = !this.touchingPlayer.body.wasTouching.none
     const jumpingOrFalling = this.touchingPlayer.body.velocity.y < 0 || this.touchingPlayer.body.velocity.y > 10
     if (overlapping && jumpingOrFalling) {
-      change = 1
+      change = 0.5
     }
 
     this.changeCollisionBoxBy(change)

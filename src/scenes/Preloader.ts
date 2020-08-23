@@ -8,6 +8,7 @@ export default class Preloader extends Phaser.Scene {
   preload() {
     this.load.image('sky', 'assets/images/sky.png')
     this.load.image('platform', 'assets/images/platform.png')
+    this.load.image('platform200', 'assets/images/platform200.png')
     this.load.image('platform-quicksand', 'assets/images/platform_quicksand.jpg')
     this.load.spritesheet('dude',
       'assets/images/dude.png',
